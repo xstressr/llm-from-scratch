@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.env
+.python-version
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Training / model artifacts
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+*.ckpt
+03-nanogpt/runs/**
+!03-nanogpt/runs/.gitkeep
+**/out/
+**/checkpoints/
+
+# Data (keep small text; ignore large dumps)
+*.csv
+*.parquet
+*.npz
+!02-makemore/data/.gitkeep
+
+# C build
+*.o
+*.a
+*.dSYM/
+a.out
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Vendor clones (optional local checkouts; prefer submodules later)
+# Keep directory placeholders via .gitkeep

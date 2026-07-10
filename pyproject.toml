@@ -1,0 +1,19 @@
+[project]
+name = "llm-from-scratch"
+version = "0.1.0"
+description = "Karpathy-path practice: micrograd → makemore → nanoGPT → C impl → nanochat"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26",
+  "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+torch = [
+  "torch>=2.2",
+]
+dev = [
+  "ipython>=8.0",
+  "jupyter>=1.0",
+]

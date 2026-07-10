@@ -1,0 +1,59 @@
+# llm-from-scratch
+
+按 Karpathy 路线从零理解深度学习与 LLM：自动微分 → 字符级语言模型 → GPT 训练 → C 底层实现 → 最小 Chat 栈。
+
+正式笔记在 Obsidian Vault：`01-Learning/AI-ML/Karpathy学习路线.md`。本仓库只放可跑代码与实验。
+
+## 阶段
+
+| 目录 | 阶段 | 状态 |
+|------|------|------|
+| `01-micrograd/` | 手写标量 autograd + 最小 MLP | 脚手架已就绪，从这里开始 |
+| `02-makemore/` | 字符级 LM：bigram → MLP → RNN → Transformer | 目录占位 |
+| `03-nanogpt/` | 跑通小规模 GPT 训练 | 目录占位；上游放 `vendor/` |
+| `04-c-impl/` | `llama2.c` / `llm.c` 调用链阅读 | 目录占位 |
+| `05-nanochat/` | tokenizer → 训练 → 推理服务端到端 | 目录占位 |
+
+上游仓库暂不 clone；需要时再放进各阶段的 `vendor/`（或改成 git submodule）。
+
+
+## 本地 vs Colab（VS Code 扩展）
+
+代码始终在本仓库本地编辑。需要 GPU 时，用 VS Code 的 **Colab** 扩展连接远端 runtime，直接在本机打开的 notebook / 终端里跑（无需单独维护上传版 Colab notebook）。
+
+| 工作 | 在哪跑 |
+|------|--------|
+| 手写 / 读代码 / 小实验（micrograd、makemore、C） | 本地 CPU |
+| nanoGPT / nanochat 等 GPU 训练 | 本机打开文件 → Colab 扩展连远端 GPU |
+
+checkpoint 仍不要提交 git（`runs/` 已 ignore）。
+
+## 环境
+
+```bash
+cd /Users/jimmy/Projects/learning/llm-from-scratch
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+# 阶段 3 起再装：pip install -e ".[torch]"
+```
+
+## 快速开始（阶段 1）
+
+```bash
+cd 01-micrograd
+python train_toy.py
+```
+
+
+## Agent / 笔记分流
+
+本仓库只放代码。Agent 规则见 [`AGENTS.md`](AGENTS.md)。
+
+正式笔记写到 Vault：`01-Learning/AI-ML/`。可用 [`llm-from-scratch.code-workspace`](llm-from-scratch.code-workspace) 在同一窗口打开「代码 + Vault」。
+
+## 约定
+
+- **练习代码**：写在各阶段目录根下（如 `value.py`），不要改 `vendor/` 里的上游。
+- **笔记**：结论写回 Vault；这里的 `notes/` / `call-chains/` / `deploy-notes/` 只作草稿。
+- **产物**：checkpoint、大数据、`.venv` 一律 gitignore。
