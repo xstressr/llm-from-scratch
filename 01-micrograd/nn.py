@@ -24,8 +24,8 @@ class Neuron(Module):
         self.nonlin = nonlin
 
     def __call__(self, x: List[Value]) -> Value:
-        # TODO: act = sum(wi*xi, b); return act.tanh() or act.relu() if nonlin else act
-        raise NotImplementedError("implement Neuron.__call__")
+        act = sum((wi * xi for wi, xi in zip(self.w, x)), Value(0.0)) + self.b
+        return act.tanh() if self.nonlin else act
 
     def parameters(self) -> List[Value]:
         return self.w + [self.b]

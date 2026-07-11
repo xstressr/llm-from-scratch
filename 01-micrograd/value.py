@@ -7,6 +7,7 @@ Reference shape: https://github.com/karpathy/micrograd
 from __future__ import annotations
 
 from typing import Callable, Set, Tuple, Union
+import math
 
 Number = Union[int, float]
 
@@ -36,30 +37,63 @@ class Value:
 
     def __add__(self, other: Union["Value", Number]) -> "Value":
         other = other if isinstance(other, Value) else Value(other)
-        # TODO: out = Value(self.data + other.data, (self, other), "+")
-        # TODO: define out._backward to distribute out.grad to self/other
-        raise NotImplementedError("implement Value.__add__")
+        out = Value(self.data + other.data, (self, other), "+")
+
+        def _backward() -> None:
+            # d(out)/d(self) = 1, d(out)/d(other) = 1
+            self.grad += out.grad
+            other.grad += out.grad
+
+        out._backward = _backward
+        return out
 
     def __mul__(self, other: Union["Value", Number]) -> "Value":
         other = other if isinstance(other, Value) else Value(other)
-        # TODO: product rule for grads
-        raise NotImplementedError("implement Value.__mul__")
+        out = Value(self.data * other.data, (self, other), "*")
+        def _backward() -> None:
+            # d(out)/d(self) = other.data, d(out)/d(other) = self.data
+            self.grad += other.data * out.grad
+            other.grad += self.data * out.grad
+
+        out._backward = _backward
+        return out
 
     def __pow__(self, exponent: Number) -> "Value":
         assert isinstance(exponent, (int, float))
-        # TODO: d/dx x^n = n * x^(n-1)
-        raise NotImplementedError("implement Value.__pow__")
+        out = Value(self.data ** exponent, (self,), f"**{exponent}")
+        def _backward() -> None:
+            # d(out)/d(self) = exponent * self.data^(exponent-1)
+            self.grad += exponent * self.data ** (exponent-1) * out.grad
+
+        out._backward = _backward
+        return out
 
     def tanh(self) -> "Value":
-        # TODO: out = tanh(self.data); grad *= (1 - t^2)
-        raise NotImplementedError("implement Value.tanh")
+        out = Value(math.tanh(self.data), (self,), "tanh")
+        def _backward() -> None:
+            # d(out)/d(self) = 1 - tanh(self.data)^2
+            self.grad += (1 - math.tanh(self.data)**2) * out.grad
+
+        out._backward = _backward
+        return out
 
     def relu(self) -> "Value":
-        # TODO: out = max(0, self.data); grad *= (self.data > 0)
-        raise NotImplementedError("implement Value.relu")
+        out = Value(max(0, self.data), (self,), "relu")
+        def _backward() -> None:
+            # d(out)/d(self) = 1 if self.data > 0 else 0
+            self.grad += (self.data > 0) * out.grad
+
+        out._backward = _backward
+        return out
 
     def exp(self) -> "Value":
-        raise NotImplementedError("implement Value.exp (optional)")
+        out = Value(math.exp(self.data), (self,), "exp")
+        def _backward() -> None:
+            # d(out)/d(self) = exp(self.data)
+            self.grad += math.exp(self.data) * out.grad
+
+        out._backward = _backward
+        return out
 
     # --- sugar ---
 
@@ -92,7 +126,19 @@ class Value:
         # 1. topological sort of all nodes reachable from self via _prev
         # 2. self.grad = 1.0
         # 3. for each node in reverse topo order: node._backward()
-        raise NotImplementedError("implement Value.backward")
+        topo = []
+        visited = set()
+        def build_topo(v):
+            if v not in visited:
+                visited.add(v)
+                for child in v._prev:
+                    build_topo(child)
+                topo.append(v)
+        build_topo(self)
+        self.grad = 1.0
+        topo.reverse()
+        for node in topo:
+            node._backward()
 
 
 def is_implemented() -> bool:
