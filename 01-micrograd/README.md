@@ -14,9 +14,10 @@
 
 | 文件 | 作用 |
 |------|------|
-| `value.py` | 手写标量 autograd（当前为 stub，待你填完） |
+| `value.py` | 手写标量 autograd |
 | `nn.py` | 最小神经网络 |
 | `train_toy.py` | toy dataset 训练入口 |
+| `demo.ipynb` | Jupyter：计算图 / 反传校验 / 训练曲线 / 决策边界 |
 | `notes/` | 计算图草稿（可选） |
 
 ## 运行
@@ -24,6 +25,12 @@
 ```bash
 # 在仓库根已激活 venv 的前提下
 python train_toy.py
+
+# 交互式 demo（选 .venv 作 kernel）
+# 可选：pip install -e ".[dev]" && pip install graphviz
+# 系统 graphviz：brew install graphviz
 ```
+
+在 Cursor / VS Code 打开 `demo.ipynb`，从上到下跑即可。
 
 上游参考可稍后 clone 到仓库外，或本阶段不放 vendor，直接手写。

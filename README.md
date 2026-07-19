@@ -8,8 +8,8 @@
 
 | 目录 | 阶段 | 状态 |
 |------|------|------|
-| `01-micrograd/` | 手写标量 autograd + 最小 MLP | 脚手架已就绪，从这里开始 |
-| `02-makemore/` | 字符级 LM：bigram → MLP → RNN → Transformer | 目录占位 |
+| `01-micrograd/` | 手写标量 autograd + 最小 MLP | 已完成 |
+| `02-makemore/` | 字符级 LM：bigram → MLP → RNN → Transformer | 进行中（`bigram.py` + `mlp.py` 已通） |
 | `03-nanogpt/` | 跑通小规模 GPT 训练 | 目录占位；上游放 `vendor/` |
 | `04-c-impl/` | `llama2.c` / `llm.c` 调用链阅读 | 目录占位 |
 | `05-nanochat/` | tokenizer → 训练 → 推理服务端到端 | 目录占位 |
@@ -34,15 +34,17 @@ checkpoint 仍不要提交 git（`runs/` 已 ignore）。
 cd /Users/jimmy/Projects/learning/llm-from-scratch
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -e .
-# 阶段 3 起再装：pip install -e ".[torch]"
+pip install -e ".[torch]"
 ```
 
-## 快速开始（阶段 1）
+## 快速开始
 
 ```bash
-cd 01-micrograd
-python train_toy.py
+# 阶段 1
+cd 01-micrograd && python train_toy.py
+
+# 阶段 2（当前）
+cd 02-makemore && python bigram.py
 ```
 
 

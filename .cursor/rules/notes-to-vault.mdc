@@ -1,0 +1,16 @@
+---
+description: Learning notes belong in the Obsidian Vault, not this code repo
+alwaysApply: true
+---
+
+# Notes → Vault
+
+This repo is for code experiments only.
+
+When the user asks for learning notes, summaries, or study write-ups related to Karpathy / micrograd / makemore / nanoGPT / llm.c / nanochat:
+
+1. Write them under the Obsidian Vault:
+   `/Users/jimmy/Library/Mobile Documents/iCloud~md~obsidian/Documents/Vault/01-Learning/AI-ML/`
+2. Prefer updating or linking from `Karpathy学习路线.md` when relevant.
+3. Keep only short scratch notes in this repo (`notes/`, `call-chains/`, `deploy-notes/`).
+4. Shared agent memory lives in the Vault `memory/` directory, not here.
