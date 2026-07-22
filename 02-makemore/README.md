@@ -8,8 +8,9 @@
 2. 第 1 讲：`bigram.py`（计数表 ↔ 单层神经网络）
 3. 第 2 讲：`mlp.py`（embedding + 多字符 context + MLP）
 4. 第 3 讲：`batchnorm.py`（初始化 + BatchNorm + 模块化）
-5. 后续：WaveNet → Transformer
-6. 每一讲一页笔记写回 Vault：`01-Learning/AI-ML/`
+5. 第 4 讲：手写反向传播（Backprop Ninja）→ 计划 `backprop.py`
+6. 第 5 讲：WaveNet 风格更深结构
+7. 每一讲一页笔记写回 Vault：`01-Learning/AI-ML/`
 
 ## 本目录文件
 
