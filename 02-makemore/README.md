@@ -8,8 +8,8 @@
 2. 第 1 讲：`bigram.py`（计数表 ↔ 单层神经网络）
 3. 第 2 讲：`mlp.py`（embedding + 多字符 context + MLP）
 4. 第 3 讲：`batchnorm.py`（初始化 + BatchNorm + 模块化）
-5. 第 4 讲：手写反向传播（Backprop Ninja）→ 计划 `backprop.py`
-6. 第 5 讲：WaveNet 风格更深结构
+5. 第 4 讲：手写反向传播（Backprop Ninja）→ `backprop.py`
+6. 第 5 讲：WaveNet 风格层次融合 → `wavenet.py`
 7. 每一讲一页笔记写回 Vault：`01-Learning/AI-ML/`
 
 ## 本目录文件
@@ -20,6 +20,8 @@
 | `bigram.py` | 第 1 讲：count bigram + neural bigram |
 | `mlp.py` | 第 2 讲：Bengio 风格 MLP |
 | `batchnorm.py` | 第 3 讲：Kaiming + BatchNorm + Linear/BN/Tanh |
+| `backprop.py` | 第 4 讲：手写反传 vs autograd 对照 |
+| `wavenet.py` | 第 5 讲：模块化 → 层次融合（WaveNet 风格） |
 | `plot_tanh.py` | 画 tanh / 局部梯度示意 |
 | `experiments/` | 临时实验脚本 |
 
@@ -31,6 +33,8 @@ cd 02-makemore
 python bigram.py
 python mlp.py
 python batchnorm.py
+python backprop.py
+python wavenet.py
 ```
 
 预期：
@@ -38,6 +42,8 @@ python batchnorm.py
 - bigram：count NLL ≈ 2.45；neural 逼近同一量级
 - mlp：test NLL ≈ 2.35（低于 bigram）；采样比 bigram 更像人名
 - batchnorm：init loss ≈ log(27)≈3.30；test 与 mlp 同量级或略好
+- backprop：手写梯度与 autograd `allclose=True`
+- wavenet：阶段 1 扁平基线应贴近 batchnorm；层次融合后再比 val
 
 ## 笔记结构（写回 Vault）
 

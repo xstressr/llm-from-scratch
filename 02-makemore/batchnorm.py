@@ -72,16 +72,22 @@ class BatchNorm1d:
         self.running_var = torch.ones(dim)
 
     def __call__(self, x: torch.Tensor) -> torch.Tensor:
+        # 2D (B, C)：沿 batch；3D (B, T, C)：沿 batch+时间（WaveNet 层次融合需要）
         if self.training:
-            # x: (B, dim) → 沿 batch 维
-            mean = x.mean(0, keepdim=True)
-            var = x.var(0, keepdim=True, unbiased=False)
+            if x.ndim == 2:
+                reduce_dim: int | tuple[int, ...] = 0
+            elif x.ndim == 3:
+                reduce_dim = (0, 1)
+            else:
+                raise ValueError(f"BatchNorm1d expects 2D or 3D, got ndim={x.ndim}")
+            mean = x.mean(reduce_dim, keepdim=True)
+            var = x.var(reduce_dim, keepdim=True, unbiased=False)
             with torch.no_grad():
                 self.running_mean = (
-                    (1 - self.momentum) * self.running_mean + self.momentum * mean.squeeze(0)
+                    (1 - self.momentum) * self.running_mean + self.momentum * mean.reshape(-1)
                 )
                 self.running_var = (
-                    (1 - self.momentum) * self.running_var + self.momentum * var.squeeze(0)
+                    (1 - self.momentum) * self.running_var + self.momentum * var.reshape(-1)
                 )
         else:
             mean = self.running_mean
