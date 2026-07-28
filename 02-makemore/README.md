@@ -9,7 +9,7 @@
 3. 第 2 讲：`mlp.py`（embedding + 多字符 context + MLP）
 4. 第 3 讲：`batchnorm.py`（初始化 + BatchNorm + 模块化）
 5. 第 4 讲：手写反向传播（Backprop Ninja）→ `backprop.py`（融合版结论）、`backprop_ninja.py`（视频 4 个练习逐步版）
-6. 第 5 讲：WaveNet 风格层次融合 → `wavenet.py`
+6. 第 5 讲：WaveNet 风格层次融合 → `wavenet.py`（含视频的三步对照实验、BN 3D 诊断、卷积等价性 demo）
 7. 每一讲一页笔记写回 Vault：`01-Learning/AI-ML/`
 
 ## 本目录文件
@@ -22,7 +22,7 @@
 | `batchnorm.py` | 第 3 讲：Kaiming + BatchNorm + Linear/BN/Tanh |
 | `backprop.py` | 第 4 讲：融合版手写反传 vs autograd 对照（速查） |
 | `backprop_ninja.py` | 第 4 讲：视频 Exercise 1-4（原子级 26 项 exact 比对 → 融合 → 手写梯度训练） |
-| `wavenet.py` | 第 5 讲：模块化 → 层次融合（WaveNet 风格） |
+| `wavenet.py` | 第 5 讲：模块化 → 层次融合（WaveNet 风格）；四个对照配置 + BN 诊断 + 卷积 demo |
 | `plot_tanh.py` | 画 tanh / 局部梯度示意 |
 | `experiments/` | 临时实验脚本 |
 
@@ -37,7 +37,10 @@ python batchnorm.py
 python backprop.py
 python backprop_ninja.py --steps 0                     # 只做 Exercise 1-3 梯度校验
 python backprop_ninja.py --exercise 4 --steps 200000   # 视频同款训练量（CPU ~50s）
-python wavenet.py
+python wavenet.py --arch hier                          # 默认层次融合
+python wavenet.py --arch flat8 --steps 200000          # 对照基线：只拉长 context
+python wavenet.py --bn-diagnose                        # BN 在 3D 输入上的统计维现场
+python wavenet.py --conv-demo                          # 卷积 = for 循环塞进 kernel
 ```
 
 预期：
@@ -47,7 +50,8 @@ python wavenet.py
 - batchnorm：init loss ≈ log(27)≈3.30；test 与 mlp 同量级或略好
 - backprop：手写梯度与 autograd `allclose=True`
 - backprop_ninja：Exercise 1 的 26 项全部 `exact=True`；Exercise 2/3 是 `exact=False` + `approximate=True`（融合改变了运算顺序，属预期）；Exercise 4 跑 200k 步 val ≈ 2.17
-- wavenet：阶段 1 扁平基线应贴近 batchnorm；层次融合后再比 val
+- wavenet：参数量 flat3 12097 / flat8 22097 / hier 22397 / big 76579（与视频一致）；跑满 200k 步时视频参考 val 依次为 2.10 / 2.02 / 2.03 / 1.993
+  - 注意结论：**提升主要来自 context 3→8**，参数量配平后层次结构本身基本持平；破 2.0 靠 `--arch big` 加容量
 
 ## 笔记结构（写回 Vault）
 

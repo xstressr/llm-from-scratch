@@ -24,15 +24,14 @@ from dataclasses import dataclass, fields
 
 import torch
 import torch.nn.functional as F
-
 from bigram import DATA_PATH, load_words
 from mlp import (
+    BATCH_SIZE,
     BLOCK_SIZE,
     N_EMBD,
-    BATCH_SIZE,
     SEED,
-    build_vocab,
     build_dataset,
+    build_vocab,
     split_words,
 )
 
@@ -51,7 +50,7 @@ def cmp(name: str, dt: torch.Tensor, t: torch.Tensor) -> bool:
     ex = bool(torch.all(dt == t.grad).item())
     app = bool(torch.allclose(dt, t.grad))
     maxdiff = (dt - t.grad).abs().max().item()
-    print(f"  {name:15s} | exact: {str(ex):5s} | approximate: {str(app):5s} | maxdiff: {maxdiff:.3e}")
+    print(f"  {name:15s} | exact: {ex!s:5s} | approximate: {app!s:5s} | maxdiff: {maxdiff:.3e}")
     return ex
 
 
@@ -315,7 +314,8 @@ def manual_grads(
     logits: torch.Tensor,
 ) -> list[torch.Tensor]:
     """Exercise 4 用的融合版反传，返回顺序同 PARAM_NAMES。"""
-    C, W1, b1, W2, b2, bngain, bnbias = params
+    # b1 / b2 / bnbias 的梯度不依赖它们自身的值，故不取用
+    C, W1, _, W2, _, bngain, _ = params
     n = Xb.shape[0]
 
     dlogits = F.softmax(logits, 1)
