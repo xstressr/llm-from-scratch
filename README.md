@@ -9,8 +9,8 @@
 | 目录 | 阶段 | 状态 |
 |------|------|------|
 | `01-micrograd/` | 手写标量 autograd + 最小 MLP | 已完成 |
-| `02-makemore/` | 字符级 LM：bigram → MLP → RNN → Transformer | 进行中（`bigram.py` + `mlp.py` 已通） |
-| `03-nanogpt/` | 跑通小规模 GPT 训练 | 目录占位；上游放 `vendor/` |
+| `02-makemore/` | 字符级 LM：bigram → MLP → WaveNet 风格层次融合 | 主干已完成（test NLL ≈ 2.10） |
+| `03-nanogpt/` | 跑通小规模 GPT 训练与受控对照实验 | 下一阶段；上游放 `vendor/` |
 | `04-c-impl/` | `llama2.c` / `llm.c` 调用链阅读 | 目录占位 |
 | `05-nanochat/` | tokenizer → 训练 → 推理服务端到端 | 目录占位 |
 
