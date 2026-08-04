@@ -43,8 +43,11 @@ pip install -e ".[torch]"
 # 阶段 1
 cd 01-micrograd && python train_toy.py
 
-# 阶段 2（当前）
+# 阶段 2（已完成，可随时复跑）
 cd 02-makemore && python bigram.py
+
+# 阶段 3（当前下一步）：用 VS Code 打开 baseline Notebook 并连接 Colab
+code 03-nanogpt/experiments/01_tiny_shakespeare_baseline.ipynb
 ```
 
 

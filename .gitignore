@@ -23,6 +23,8 @@ venv/
 *.ckpt
 03-nanogpt/runs/**
 !03-nanogpt/runs/.gitkeep
+03-nanogpt/data/**
+!03-nanogpt/data/.gitkeep
 **/out/
 **/checkpoints/
 

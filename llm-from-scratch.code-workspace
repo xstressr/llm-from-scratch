@@ -9,5 +9,10 @@
       "path": "/Users/jimmy/Library/Mobile Documents/iCloud~md~obsidian/Documents/Vault"
     }
   ],
-  "settings": {}
+  "settings": {
+    "python.defaultInterpreterPath": "${workspaceFolder:llm-from-scratch}/.venv/bin/python",
+    "python.analysis.extraPaths": [
+      "${workspaceFolder:llm-from-scratch}/03-nanogpt"
+    ]
+  }
 }
