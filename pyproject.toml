@@ -8,6 +8,7 @@ dependencies = [
   "numpy>=1.26",
   "matplotlib>=3.8",
   "graphviz>=0.21",
+  "regex>=2026.7.19",
 ]
 
 [project.optional-dependencies]
