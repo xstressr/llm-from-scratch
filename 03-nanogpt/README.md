@@ -2,7 +2,7 @@
 
 目标：看懂 GPT 训练循环（tokenizer、dataset、attention、block、optimizer），并通过可重复实验建立模型规模、训练成本与效果之间的直觉。
 
-当前里程碑：**Tiny Shakespeare baseline 已就绪，等待在 VS Code Colab runtime 上执行完整训练。**
+当前里程碑：**工程 baseline + 三组对照 + 加长训已完成**；上游对照见 `vendor/nanoGPT`（笔记在 Vault「上游对照阅读」）。
 
 ## 目录
 
@@ -16,7 +16,7 @@
 | `experiments/02_karpathy_lets_build_gpt.ipynb` | 课堂版：跟着 Lecture 7 从 bigram 搭到 GPT |
 | `data/` | 本地/远端数据缓存（gitignore） |
 | `runs/` | checkpoint 与实验指标（gitignore） |
-| `vendor/` | 后续放置 [karpathy/nanoGPT](https://github.com/karpathy/nanoGPT) 供逐段对照 |
+| `vendor/nanoGPT/` | 上游 [karpathy/nanoGPT](https://github.com/karpathy/nanoGPT)（gitignore，本地对照用） |
 
 ## 第一次实验
 

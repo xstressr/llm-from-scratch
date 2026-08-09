@@ -48,3 +48,5 @@ a.out
 
 # Vendor clones (optional local checkouts; prefer submodules later)
 # Keep directory placeholders via .gitkeep
+03-nanogpt/vendor/nanoGPT/
+04-c-impl/vendor/
