@@ -30,21 +30,33 @@ checkpoint 仍不要提交 git（`runs/` 已 ignore）。
 
 ## 环境
 
+本仓库用 [uv](https://docs.astral.sh/uv/) 管 Python 和依赖，不要再用 `python -m venv` + `pip install`。
+
 ```bash
-cd /Users/jimmy/Projects/learning/llm-from-scratch
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[torch]"
+cd D:\Projects\llm-from-scratch
+uv sync --extra torch
+```
+
+之后用 `uv run` 跑脚本（会自动走仓库根的 `.venv`），例如：
+
+```bash
+uv run python 01-micrograd/train_toy.py
+```
+
+如果要在当前终端里激活解释器：
+
+```powershell
+.\.venv\Scripts\Activate.ps1
 ```
 
 ## 快速开始
 
 ```bash
 # 阶段 1
-cd 01-micrograd && python train_toy.py
+uv run python 01-micrograd/train_toy.py
 
 # 阶段 2（已完成，可随时复跑）
-cd 02-makemore && python bigram.py
+uv run python 02-makemore/bigram.py
 
 # 阶段 3（当前下一步）：用 VS Code 打开 baseline Notebook 并连接 Colab
 code 03-nanogpt/experiments/01_tiny_shakespeare_baseline.ipynb
