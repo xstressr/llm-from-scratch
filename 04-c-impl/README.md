@@ -13,6 +13,6 @@ Windows CPU 编译（MSVC）：`build_cpu_msvc.bat`。CUDA 走 WSL2 + `/usr/loca
 
 - FP32：`make train_gpt2fp32cu GPU_COMPUTE_CAPABILITY=86` → `./train_gpt2fp32cu`
 - 主线 BF16：`04-c-impl/build_gpt2cu_wsl.sh` 或 `make train_gpt2cu GPU_COMPUTE_CAPABILITY=86` → `./train_gpt2cu`（需要 `gpt2_124M_bf16.bin`）
-- llama2 训练：`setup_llama2_wsl.sh` / `train_llama2_wsl.sh` / `start_llama2_260k_wsl.sh`；解释器是 WSL `/home/xstre/venvs/llm-scratch`（CUDA torch），不是 Windows CPU `.venv`
+- llama2 训练：`setup_llama2_wsl.sh` / `train_llama2_wsl.sh` / `start_llama2_260k_wsl.sh`；解释器是 WSL venv（默认 `~/venvs/llm-scratch`，CUDA torch，可用 `LLM_SCRATCH_PY` 覆盖），不是 Windows CPU `.venv`
 
 数字写回 Vault `01-Learning/AI-ML/`。

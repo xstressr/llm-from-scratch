@@ -1,21 +1,34 @@
 # llm-from-scratch
 
-按 Karpathy 路线从零理解深度学习与 LLM：自动微分 → 字符级语言模型 → GPT 训练 → C 底层实现 → 最小 Chat 栈。
-
-正式笔记在 Obsidian Vault：`01-Learning/AI-ML/Karpathy学习路线.md`。本仓库只放可跑代码与实验。
+按 Karpathy 路线从零理解深度学习与 LLM：自动微分 → 字符级语言模型 → GPT 训练 → C 底层实现 → 最小 Chat 栈。本仓库只放可跑代码与实验，长文写在博客。
 
 ## 阶段
 
 | 目录 | 阶段 | 状态 |
 |------|------|------|
 | `01-micrograd/` | 手写标量 autograd + 最小 MLP | 已完成 |
-| `02-makemore/` | 字符级 LM：bigram → MLP → WaveNet 风格层次融合 | 主干已完成（test NLL ≈ 2.10） |
-| `03-nanogpt/` | 跑通小规模 GPT 训练与受控对照实验 | 下一阶段；上游放 `vendor/` |
-| `04-c-impl/` | `llama2.c` / `llm.c` 调用链阅读 | 目录占位 |
-| `05-nanochat/` | tokenizer → 训练 → 推理服务端到端 | 目录占位 |
+| `02-makemore/` | 字符级 LM：bigram → MLP → WaveNet 风格层次融合 | 已完成（test NLL ≈ 2.10） |
+| `03-nanogpt/` | 最小 GPT 训练循环 + 受控对照实验 | 已完成（工程 baseline + 三组对照 + 加长训） |
+| `04-c-impl/` | `llama2.c` / `llm.c`：读调用链、编译、训练 | 已完成（结果见下） |
+| `05-nanochat/` | tokenizer → 预训练 → SFT → 推理服务 | 暂停（2026-09），未开始 |
 
-上游仓库暂不 clone；需要时再放进各阶段的 `vendor/`（或改成 git submodule）。
+## 结果
 
+`04-c-impl/`，单卡 RTX 3060（6 GB）：
+
+- **llama2.c 15M × TinyStories**：从零训练 260K 步（约 10.3 h），终点 val loss **1.1018**（官方 stories15M 为 1.072）；`run.c` 推理速度与官方权重持平（约 352 tok/s，8 线程）。
+- **llm.c GPT-2 124M**：CPU 版 `train_gpt2.c`、FP32 CUDA `train_gpt2fp32cu`、BF16 混合精度 `train_gpt2cu` 均编译跑通（6 GB 显存需 `-b 4 -t 64`）。
+
+曲线脚本：`04-c-impl/plot_llama2_260k_loss.py`。
+
+## 相关文章
+
+Zero to One AI 学习日志（[blog.crazyai.uk](https://blog.crazyai.uk/)）：
+
+- [The Batch Is a Factory of Futures](https://blog.crazyai.uk/posts/transformer-field-notes-01-batch-factory-of-futures/)（Transformer Field Notes 系列第 1 篇）
+- [Python Writes the Answer Sheet](https://blog.crazyai.uk/posts/c-field-notes-01-python-writes-the-answer-sheet/)（llm.c）
+- [There Is No Autograd Here](https://blog.crazyai.uk/posts/c-field-notes-02-there-is-no-autograd-here/)（llm.c）
+- [The Model File Has No Names](https://blog.crazyai.uk/posts/inference-field-notes-01-the-model-file-has-no-names/)（llama2.c 推理）
 
 ## 本地 vs Colab（VS Code 扩展）
 
@@ -25,15 +38,15 @@
 |------|--------|
 | 手写 / 读代码 / 小实验（micrograd、makemore、C） | 本地 CPU |
 | nanoGPT / nanochat 等 GPU 训练 | 本机打开文件 → Colab 扩展连远端 GPU |
+| llama2.c / llm.c CUDA 训练 | WSL2 + CUDA（见 `04-c-impl/README.md`） |
 
-checkpoint 仍不要提交 git（`runs/` 已 ignore）。
+checkpoint 不提交 git（`runs/`、`out/` 已 ignore）。
 
 ## 环境
 
 本仓库用 [uv](https://docs.astral.sh/uv/) 管 Python 和依赖，不要再用 `python -m venv` + `pip install`。
 
 ```bash
-cd D:\Projects\llm-from-scratch
 uv sync --extra torch
 ```
 
@@ -49,28 +62,27 @@ uv run python 01-micrograd/train_toy.py
 .\.venv\Scripts\Activate.ps1
 ```
 
+WSL 脚本的路径可用环境变量覆盖：`LLM_SCRATCH_PY`（解释器，默认 `~/venvs/llm-scratch/bin/python`）、`LLAMA2_LOG`（训练日志）、`TINYSTORIES_DIR`（数据解压目录）。
+
 ## 快速开始
 
 ```bash
 # 阶段 1
 uv run python 01-micrograd/train_toy.py
 
-# 阶段 2（已完成，可随时复跑）
+# 阶段 2
 uv run python 02-makemore/bigram.py
 
-# 阶段 3（当前下一步）：用 VS Code 打开 baseline Notebook 并连接 Colab
+# 阶段 3：用 VS Code 打开 baseline Notebook 并连接 Colab
 code 03-nanogpt/experiments/01_tiny_shakespeare_baseline.ipynb
 ```
 
-
-## Agent / 笔记分流
-
-本仓库只放代码。Agent 规则见 [`AGENTS.md`](AGENTS.md)。
-
-正式笔记写到 Vault：`01-Learning/AI-ML/`。可用 [`llm-from-scratch.code-workspace`](llm-from-scratch.code-workspace) 在同一窗口打开「代码 + Vault」。
-
 ## 约定
 
-- **练习代码**：写在各阶段目录根下（如 `value.py`），不要改 `vendor/` 里的上游。
-- **笔记**：结论写回 Vault；这里的 `notes/` / `call-chains/` / `deploy-notes/` 只作草稿。
+- **练习代码**：写在各阶段目录根下（如 `value.py`）。上游仓库放在各阶段的 `vendor/`，只在本地 clone，不提交。
+- **草稿**：`notes/` / `call-chains/` / `deploy-notes/` 只作草稿，成文写到博客。
 - **产物**：checkpoint、大数据、`.venv` 一律 gitignore。
+
+## 致谢与许可
+
+学习路线与参考实现来自 Andrej Karpathy 的 [micrograd](https://github.com/karpathy/micrograd)、[makemore](https://github.com/karpathy/makemore)、[nanoGPT](https://github.com/karpathy/nanoGPT)、[llama2.c](https://github.com/karpathy/llama2.c)、[llm.c](https://github.com/karpathy/llm.c)、[nanochat](https://github.com/karpathy/nanochat)（均为 MIT）。本仓库代码以 [MIT](LICENSE) 许可发布。

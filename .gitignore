@@ -50,3 +50,12 @@ a.out
 # Keep directory placeholders via .gitkeep
 03-nanogpt/vendor/nanoGPT/
 04-c-impl/vendor/
+
+# Local agent / editor config (contains machine-specific paths)
+AGENTS.md
+CLAUDE.md
+.cursor/
+*.code-workspace
+
+# matplotlib cache
+.mplconfig/

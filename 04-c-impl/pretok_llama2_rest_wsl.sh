@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Pretokenize remaining TinyStories shards (llama2 tokenizer). CPU only.
 set -euo pipefail
+HERE="$(cd "$(dirname "$0")" && pwd)"
 export PATH="/usr/sbin:/usr/bin:/sbin:/bin"
-LLAMA="/mnt/d/Projects/llm-from-scratch/04-c-impl/vendor/llama2.c"
-PY="/home/xstre/venvs/llm-scratch/bin/python"
+LLAMA="$HERE/vendor/llama2.c"
+PY="${LLM_SCRATCH_PY:-$HOME/venvs/llm-scratch/bin/python}"
 cd "$LLAMA"
 "$PY" - <<'PY'
 from tinystories import process_shard

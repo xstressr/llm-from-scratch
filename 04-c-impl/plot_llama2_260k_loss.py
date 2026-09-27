@@ -1,15 +1,20 @@
-"""One-off: parse llama2.c train.py log and write loss-curve PNGs. Do not commit."""
+"""Parse a llama2.c train.py log and write loss-curve PNGs.
+
+Usage: python plot_llama2_260k_loss.py [LOG] [OUT_DIR]
+  LOG defaults to ./llama2_260k.log, OUT_DIR to 04-c-impl/notes/.
+"""
 
 from __future__ import annotations
 
 import re
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-LOG = Path(r"\\wsl$\Ubuntu-24.04\home\xstre\llama2_260k.log")
-OUT = Path(r"D:\Docs\zeromd-vault\01-Learning\AI-ML")
+LOG = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("llama2_260k.log")
+OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else Path(__file__).resolve().parent / "notes"
 
 TRAIN_RE = re.compile(r"^(\d+) \| loss ([\d.]+)")
 VAL_RE = re.compile(r"^step (\d+): train loss ([\d.]+), val loss ([\d.]+)")

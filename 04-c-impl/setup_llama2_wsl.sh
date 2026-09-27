@@ -2,10 +2,11 @@
 # WSL helper: deps + unpack TinyStories onto ext4 (not NTFS) + pretok.
 # Avoid running this via PowerShell double-quoted $vars; execute the file.
 set -euo pipefail
-export PATH="/usr/sbin:/usr/bin:/sbin:/bin:/home/xstre/.local/bin:/usr/local/bin"
-LLAMA="/mnt/d/Projects/llm-from-scratch/04-c-impl/vendor/llama2.c"
-PY="/home/xstre/venvs/llm-scratch/bin/python"
-DEST="/home/xstre/tinystories/TinyStories_all_data"
+HERE="$(cd "$(dirname "$0")" && pwd)"
+export PATH="/usr/sbin:/usr/bin:/sbin:/bin:$HOME/.local/bin:/usr/local/bin"
+LLAMA="$HERE/vendor/llama2.c"
+PY="${LLM_SCRATCH_PY:-$HOME/venvs/llm-scratch/bin/python}"
+DEST="${TINYSTORIES_DIR:-$HOME/tinystories/TinyStories_all_data}"
 TAR="${LLAMA}/data/TinyStories_all_data.tar.gz"
 
 echo "== deps =="
